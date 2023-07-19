@@ -13,7 +13,11 @@ the precision of the curve, and the algorithm work under the constraint
 
 ## Fast Hilbert Curve Generation, Sorting, and Range Queries
 
+Text from the [original web-page](http://www.tiac.net/~sw/2008/10/Hilbert/moore/):
+
 ```
+## Fast Hilbert Curve Generation, Sorting, and Range Queries
+
 Hilbert curves are one of a class of space filling curves - continuous, nonsmooth
 curves that pass arbitrarily close to every point in space of arbitrary dimension
 - and much information about planar Hilbert curves is on the web - see here for
