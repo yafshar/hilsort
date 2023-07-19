@@ -72,8 +72,19 @@ approach speeds up access to the data in memory.
 
 ## Usage
 
-Convert an index into a Hilbert curve to a set of coordinates using
-`hilbert_i2c(ndims, nbits, index)`.
+### Convert an index into a Hilbert curve to a set of coordinates 
+
+using `hilbert_i2c(ndims, nbits, index) -> np.ndarray`, where
+
+```sh
+ndims: Number of coordinate axes
+nbits: Number of bits/coordinate
+index: The index, contains ndims*nbits bits (so ndims*nbits must be <= 64)
+```
+
+the returned coordinates have the `dtype=np.uint64` data type.
+
+E.g.,
 
 ```py
 from hilsort import *
@@ -81,10 +92,19 @@ from hilsort import *
 coord = hilbert_i2c(4, 8, 10)  # [1, 1, 1, 1]
 ```
 
-the returned coordinates have the `dtype=np.uint64` data type.
+### Convert coordinates of a point on a Hilbert curve to its index
 
-Convert coordinates of a point on a Hilbert curve to its index using
-`hilbert_c2i(nbits, index)`.
+using `hilbert_c2i(nbits, coord) -> int`, where 
+
+```sh
+nbits: Number of bits/coordinate.
+coord: Numpy array of n nbits-bit coordinates. shape (ndims)
+```
+
+The input coordinates must have the `dtype=np.int64` or `dtype=np.uint64`
+data type, otherwise `TypeError` for incompatible function arguments will raise.
+
+E.g.,
 
 ```py
 from hilsort import *
@@ -92,9 +112,80 @@ from hilsort import *
 coord = hilbert_i2c(4, 8, 10)  # coord [1, 1, 1, 1]
 index = hilbert_c2i(8, coord)  # index 10
 ```
+### Determine which of two points lies further along the Hilbert curve
 
-Advance from one point to its successor on a Hilbert curve using
-`hilbert_incr(nbits, coord)`.
+using `hilbert_cmp(nbits, coord1, coord2) -> int`, where 
+
+```sh
+nbits:  Number of bits/coordinate.
+coord1: Numpy array of n nbits-bit coordinates. shape (ndims)
+coord2: Numpy array of n nbits-bit coordinates. shape (ndims)  
+```
+
+The function will return any of `-1`, `0`, or `1` according to whether 
+`coord1<coord2`, `coord1==coord2`, or `coord1>coord2`.
+
+The input coordinates must have the `int` data type (any of 
+`np.int32, np.int64, np.unint32, np.uint64`).
+
+E.g.,
+
+```py
+from hilsort import *
+
+coord1 = hilbert_i2c(4, 8, 10)        # coord1 [1, 1, 1, 1]
+coord2 = hilbert_i2c(4, 8, 10)        # coord2 [1, 1, 1, 1]
+cmp = hilbert_cmp(8, coord1, coord2)  # cmp 0 (coord1==coord2)
+
+coord2 = hilbert_i2c(4, 8, 11)        # coord2 [1, 1, 1, 0]
+cmp = hilbert_cmp(8, coord1, coord2)  # cmp -1 (coord1<coord2)
+
+coord2 = hilbert_i2c(4, 8, 5)         # coord2 [1, 1, 0, 1]
+cmp = hilbert_cmp(8, coord1, coord2)  # cmp 1 (coord1>coord2)
+```
+
+If one wants to compare two points with floating data type, they can use
+`hilbert_ieee_cmp(coord1, coord2) -> int`, where 
+
+```sh
+coord1: Numpy array coordinates. shape (ndims)
+coord2: Numpy array coordinates. shape (ndims)  
+```
+
+E.g.,
+
+```py
+import numpy as np
+from hilsort import *
+
+coord1 = 2 * np.random.rand(2) - 1.0  # coord1 [0.45893551, 0.02698878]
+cmp = hilbert_ieee_cmp(coord1, coord1)  # cmp 0 (coord1==coord1)
+
+coord2 = 2 * np.random.rand(2) - 1.0  # coord2 [0.41206415, 0.7392873]
+
+cmp = hilbert_ieee_cmp(8, coord1, coord2)  # cmp -1 (coord1<coord2)
+```
+
+### Determine the first/last vertex of a box to lie on a Hilbert curve
+
+using 
+
+`hilbert_min_box_vtx(nbits, coord1, coord2) -> np.ndarray`,  
+`hilbert_max_box_vtx(nbits, coord1, coord2) -> np.ndarray`,  
+
+The input coordinates must have the `int` data type (any of 
+`np.int32, np.int64, np.unint32, np.uint64`).
+
+or
+
+`hilbert_ieee_min_box_vtx(coord1, coord2) -> np.ndarray`,  
+`hilbert_ieee_max_box_vtx(coord1, coord2) -> np.ndarray`,  
+
+### Advance from one point to its successor on a Hilbert curve 
+
+using `hilbert_incr(nbits, coord) -> np.ndarray`.
+
+E.g.,
 
 ```py
 from hilsort import *
@@ -106,8 +197,12 @@ coord = hilbert_incr(4, coord)  # [1, 1]
 coord = hilbert_incr(4, coord)  # [1, 0]
 ```
 
-Sorting 3D data using both `hilbert_sort(nbits, data)` &
+### Sorting spatial data
+
+Sorting 3D data using both `hilbert_sort(nbits, data)` and
 `hilbert_sort_3d(data)`.
+
+E.g.,
 
 ```py
 import numpy as np
@@ -128,6 +223,7 @@ and the algorithm works under the constraint of  `ndims * nbits <= 64`.
 The `hilbert_sort_3d(data)` interface is used to sort 3D data points with 
 `(N, 3)` shape based on a Hilbert curve using `8` number of bits/coordinate.
 
+E.g.,
 
 ```py
 import numpy as np
