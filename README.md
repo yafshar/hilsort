@@ -1,11 +1,12 @@
 # Hilbert-related calculations plus sorting points in Euclidean space using space-filling curves.
 
-Space-filling curves are 1-dimensional traversals of n-dimensional space where
-each point in a discrete space is visited once. These curves have been heavily
-researched for their locality-preserving properties and are especially useful
-for dimensionality reduction.
+A space-filling curve is a curve whose trajectory traverses and covers every
+point within a higher-dimensional region, often exemplified by the unit square
+(or, in more general cases, an n-dimensional unit hypercube). These curves have
+been heavily researched for their locality-preserving properties and are
+especially useful for dimensionality reduction.
 
-The current module is a Python bindings for Doug Moore's Fast Hilbert Curve
+The current module is a Python binding for Doug Moore's Fast Hilbert Curve
 Generation plus extra functionality to use the methods for sorting points in
 Euclidean space using space-filling curves. The number of nbits bits determines
 the precision of the curve, and the algorithm work under the constraint
@@ -13,7 +14,7 @@ the precision of the curve, and the algorithm work under the constraint
 
 ## Fast Hilbert Curve Generation, Sorting, and Range Queries
 
-Text from the [original web-page](http://www.tiac.net/~sw/2008/10/Hilbert/moore/):
+Text from the [original web page](http://www.tiac.net/~sw/2008/10/Hilbert/moore/):
 
 ```
 ## Fast Hilbert Curve Generation, Sorting, and Range Queries
@@ -60,12 +61,12 @@ Hilbert curve methods useful or entertaining.
 Doug Moore (dougm@...edu)
 ```
 
-The sorting is an algorithm for implementing a Hilbert Sort, which sorts points
-according to the order in which they would be visited by a space-filling curve.
+A spatial sorting algorithm in this work, sorts points according to the order in
+which they would be visited by a space-filling curve.
 
-## Motivation for sorting algorithm
+## Motivation for the sorting algorithm
 
-When trying to store/pack up spatial data efficiently or find k nearest neighbors
+When trying to store/pack up spatial data efficiently or find nearest neighbors
 of spatial data. We need a way of sorting the data in such a way that (p1, p2)
 data located in nearby regions will live closer in memory to one another. This
 approach speeds up access to the data in memory.
