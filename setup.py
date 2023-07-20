@@ -145,7 +145,7 @@ setup(
     author_email="ya.afshar@gmail.com",
     license="LGPLv2",
     classifiers=[
-        "Development Status :: 5 - Production/Stable",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Science/Research",
         "Topic :: Scientific/Engineering",
         "Operating System :: OS Independent",
