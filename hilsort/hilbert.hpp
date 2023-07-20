@@ -141,7 +141,7 @@
 #else
 #define HILBERT_UNKNOWN_ENDIANNESS 1
 #endif
-#elif defined(WIN32)
+#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #define HILBERT_LITTLE_ENDIAN 1
 #else
 #define HILBERT_UNKNOWN_ENDIANNESS 1
