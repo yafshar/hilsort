@@ -169,18 +169,78 @@ cmp = hilbert_ieee_cmp(8, coord1, coord2)  # cmp -1 (coord1<coord2)
 
 ### Determine the first/last vertex of a box to lie on a Hilbert curve
 
-using 
+To find the first/last vertex of a box to appear on the Hilbert curve using 
 
 `hilbert_min_box_vtx(nbits, coord1, coord2) -> np.ndarray`,  
-`hilbert_max_box_vtx(nbits, coord1, coord2) -> np.ndarray`,  
+`hilbert_max_box_vtx(nbits, coord1, coord2) -> np.ndarray`, where
+
+```sh
+nbits:  Number of bits/coordinate.
+coord1: Array of ndims nbytes-byte coordinates - one corner of box
+coord2: Array of ndims nbytes-byte coordinates - opposite corner
+```
 
 The input coordinates must have the `int` data type (any of 
 `np.int32, np.int64, np.unint32, np.uint64`).
 
-or
+or if the input coordinates have the `double` data type
 
 `hilbert_ieee_min_box_vtx(coord1, coord2) -> np.ndarray`,  
-`hilbert_ieee_max_box_vtx(coord1, coord2) -> np.ndarray`,  
+`hilbert_ieee_max_box_vtx(coord1, coord2) -> np.ndarray`, where
+
+```sh
+coord1: Array of ndims double coordinates - one corner of box
+coord2: Array of ndims double coordinates - opposite corner
+```
+
+### Determine the first/last point of a box to lie on a Hilbert curve
+
+To find the first/last point (not necessarily a vertex) of a box to lie on the
+curve, using 
+
+`hilbert_min_box_pt(nbits, coord1, coord2) -> np.ndarray`,  
+`hilbert_max_box_pt(nbits, coord1, coord2) -> np.ndarray`, where
+
+```sh
+nbits:  Number of bits/coordinate.
+coord1: Array of ndims nbytes-byte coordinates - one corner of box
+coord2: Array of ndims nbytes-byte coordinates - opposite corner
+```
+
+The input coordinates must have the `int` data type (any of 
+`np.int32, np.int64, np.unint32, np.uint64`).
+
+or if the input coordinates have the `double` data type
+
+`hilbert_ieee_min_box_pt(coord1, coord2) -> np.ndarray`,  
+`hilbert_ieee_max_box_pt(coord1, coord2) -> np.ndarray`, where
+
+```sh
+coord1: Array of ndims double coordinates - one corner of box
+coord2: Array of ndims double coordinates - opposite corner
+```
+ 
+### Finding the first point after a given point to lie in the box
+
+To find the first point after a given point to lie in the box using
+
+`hilbert_nextinbox(nbits, find_prev, coord1, coord2, point) -> int`, where
+
+```sh
+nbits:     Number of bits/coordinate.
+find_prev: Is the previous point sought?
+coord1:    Array of ndims nbytes-byte coordinates - one corner of box
+coord2:    Array of ndims nbytes-byte coordinates - opposite corner
+point:     Array of ndims nbytes-byte coordinates - lower bound on point returned
+```
+
+The function will return `0` or `1`. If it returns `1`, then `coord1` and `coord2`
+modified to refer to least point after `point` in the box. If it returns `0` then
+there is no arguments change and the input `point` is beyond the last point of
+the box.
+
+The input coordinates, and point must have the `int` data type (any of 
+`np.int32, np.int64, np.unint32, np.uint64`).
 
 ### Advance from one point to its successor on a Hilbert curve 
 
